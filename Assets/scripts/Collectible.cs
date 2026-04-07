@@ -1,20 +1,22 @@
 using UnityEngine;
 
-public class Collectible : MonoBehaviour
+public abstract class Collectible : MonoBehaviour, IInteractable
 {
-    public int pointValue = 10;
-
-    private void OnTriggerEnter(Collider other)
+    public string itemName;
+     
+    public void Interact(GameObject player)
     {
-        if (other.CompareTag("Player"))
-        {
-            PlayerStats playerStats = other.GetComponent<PlayerStats>();
+        ApplyEffect(player);
+        PlayEffect();
+        Destroy(gameObject); // Destroy the object after collection
+    }
 
-            if (playerStats != null)
-            {
-                playerStats.AddScore(pointValue);
-                Destroy(gameObject);
-            }
-        }
+    
+    protected abstract void ApplyEffect(GameObject player);
+
+    
+    protected virtual void PlayEffect()
+    {
+        Debug.Log($"[{itemName}] Default sparkle effect played.");
     }
 }
